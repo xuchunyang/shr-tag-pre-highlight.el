@@ -13,12 +13,17 @@ Place this package somewhere in Emacs `load-path` and add the
 following lines to a suitable init file:
 
     (autoload 'shr-tag-pre-highlight "shr-tag-pre-highlight")
-
-## Usage
-
-Add the following lines to a suitable init file:
-
     (with-eval-after-load 'shr
+      (add-to-list 'shr-external-rendering-functions
+                   '(pre . shr-tag-pre-highlight)))
+
+If you use `use-package` to manage your init file, you can use
+something like this:
+
+    (use-package shr-tag-pre-highlight
+      :load-path "~/src/shr-tag-pre-highlight.el"
+      :after shr
+      :config
       (add-to-list 'shr-external-rendering-functions
                    '(pre . shr-tag-pre-highlight)))
 
