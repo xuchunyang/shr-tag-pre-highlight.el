@@ -146,7 +146,8 @@ Adapted from `org-src--get-lang-mode'."
                  (shr-generic pre)
                  (buffer-string)))
          (lang (or (shr-tag-pre-highlight-guess-language-attr pre)
-                   (language-detection-string code)))
+                   (let ((sym (language-detection-string code)))
+                     (and sym (symbol-name sym)))))
          (mode (and lang
                     (shr-tag-pre-highlight--get-lang-mode lang))))
     (shr-ensure-newline)
