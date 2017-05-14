@@ -31,10 +31,15 @@
 ;; Place this package somewhere in Emacs `load-path' and add the
 ;; following lines to a suitable init file:
 ;;
-;; (autoload 'shr-tag-pre-highlight "shr-tag-pre-highlight")
 ;; (with-eval-after-load 'shr
+;;   (require 'shr-tag-pre-highlight)
 ;;   (add-to-list 'shr-external-rendering-functions
 ;;                '(pre . shr-tag-pre-highlight)))
+;;
+;; (when (version< emacs-version "26")
+;;   (with-eval-after-load 'eww
+;;     (advice-add 'eww-display-html :around
+;;                 'eww-display-html--override-shr-external-rendering-functions)))
 ;;
 ;; If you use `use-package' to manage your init file, you can use
 ;; something like this:
@@ -44,31 +49,77 @@
 ;;   :after shr
 ;;   :config
 ;;   (add-to-list 'shr-external-rendering-functions
-;;                '(pre . shr-tag-pre-highlight)))
+;;                '(pre . shr-tag-pre-highlight))
+;;
+;;   (when (version< emacs-version "26")
+;;     (with-eval-after-load 'eww
+;;       (advice-add 'eww-display-html :around
+;;                   'eww-display-html--override-shr-external-rendering-functions))))
 
-;; Warning:
+;; Why is `eww-display-html' advised for Emacs version older than 26:
 ;;
 ;; Unfortunately, EWW always overrides
 ;; `shr-external-rendering-functions' until
 ;; [this commit](http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=45ebbc0301c8514a5f3215f45981c787cb26f915)
 ;; (2015-12), but Emacs 25.2 (latest release - 2017-4) doesn't include
-;; this commit.  Thus you have to use devel version of Emacs if you
-;; want syntax highlighting in EWW.
+;; this commit.  Thus if you want syntax highlighting in EWW, you have
+;; to use devel version of Emacs (also know as emacs-26 at this
+;; moment) or advice `eww-display-html' as above.
 
 ;;; Code:
 
 (require 'shr)
 (require 'dom)
 (require 'language-detection)
+(require 'cl-lib)
 
-(defvar shr-tag-pre-highlight-lang-modes
+
+;;; Compatibility
+
+(defun eww-display-html--override-shr-external-rendering-functions (orig-fun &rest r)
+  "Use our own `shr-external-rendering-functions'.
+
+In Emacs version <= 25.2, `eww-display-html' always overrides
+`shr-external-rendering-functions' thus simply change this
+variable won't work.  For later version of Emacs, you should
+ignore this then customize `shr-external-rendering-functions'
+directly."
+  (let ((tmp-fun (symbol-function 'shr-insert-document)))
+    (cl-letf (((symbol-function 'shr-insert-document)
+               (lambda (dom)
+                 (let ((shr-external-rendering-functions
+                        '((title . eww-tag-title)
+                          (form . eww-tag-form)
+                          (input . eww-tag-input)
+                          (button . eww-form-submit)
+                          (textarea . eww-tag-textarea)
+                          (select . eww-tag-select)
+                          (link . eww-tag-link)
+                          (meta . eww-tag-meta)
+                          (a . eww-tag-a)
+                          (pre . shr-tag-pre-highlight))))
+                   (funcall tmp-fun dom)))))
+      (apply orig-fun r))))
+
+
+;;; Customization
+
+(defcustom shr-tag-pre-highlight-lang-modes
   '(("ocaml" . tuareg) ("elisp" . emacs-lisp) ("ditaa" . artist)
     ("asymptote" . asy) ("dot" . fundamental) ("sqlite" . sql)
     ("calc" . fundamental) ("C" . c) ("cpp" . c++) ("C++" . c++)
     ("screen" . shell-script) ("shell" . sh) ("bash" . sh)
     ;; Used by language-detection.el
     ("emacslisp" . emacs-lisp))
-  "Adapted from `org-src-lang-modes'.")
+  "Adapted from `org-src-lang-modes'."
+  :group 'shr
+  :type '(repeat
+	  (cons
+	   (string "Language name")
+	   (symbol "Major mode"))))
+
+
+;;; Utility
 
 (defun shr-tag-pre-highlight--get-lang-mode (lang)
   "Return major mode that should be used for LANG.
