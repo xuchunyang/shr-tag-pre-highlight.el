@@ -22,9 +22,22 @@
 
 ;;; Commentary:
 
+;; [![MELPA](https://melpa.org/packages/shr-tag-pre-highlight-badge.svg)](https://melpa.org/#/shr-tag-pre-highlight)
+;;
 ;; This package adds syntax highlighting support for code block in
 ;; HTML, rendered by `shr.el'.  The probably most famous user of
 ;; `shr.el' is EWW (the Emacs Web Wowser).
+;;
+;; Example:
+;;
+;; | Before               | After                                 |
+;; | ------               | -----                                 |
+;; | ![](eww-default.png) | ![](eww-with-syntax-highlighting.png) |
+;;
+;; In above, I am using EWW to visit
+;; https://emacs-china.org/t/eww/2949. And the color theme is
+;; sanityinc-tomorrow-eighties, from Steve Purcell's
+;; color-theme-sanityinc-tomorrow package
 
 ;; Installation:
 ;;
