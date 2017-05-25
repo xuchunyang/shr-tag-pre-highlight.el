@@ -1,7 +1,7 @@
 # shr-tag-pre-highlight - Syntax highlighting code block in HTML
 
 *Author:* Chunyang Xu <mail@xuchunyang.me><br>
-*Version:* 0<br>
+*Version:* 1<br>
 
 [![MELPA](https://melpa.org/packages/shr-tag-pre-highlight-badge.svg)](https://melpa.org/#/shr-tag-pre-highlight)
 

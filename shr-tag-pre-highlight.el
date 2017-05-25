@@ -3,9 +3,10 @@
 ;; Copyright (C) 2017  Chunyang Xu
 
 ;; Author: Chunyang Xu <mail@xuchunyang.me>
+;; URL: https://github.com/xuchunyang/shr-tag-pre-highlight.el
 ;; Package-Requires: ((emacs "24") (language-detection "0.1.0"))
 ;; Keywords: html
-;; Version: 0
+;; Version: 1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
