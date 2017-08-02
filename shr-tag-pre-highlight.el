@@ -217,9 +217,10 @@ Adapted from `org-src--get-lang-mode'."
                     (shr-tag-pre-highlight--get-lang-mode lang))))
     (shr-ensure-newline)
     (insert
-     (if (fboundp mode)
-         (shr-tag-pre-highlight-fontify code mode)
-       code))
+     (or (and (fboundp mode)
+              (with-demoted-errors "Error while fontifying: %S"
+                (shr-tag-pre-highlight-fontify code mode)))
+         code))
     (shr-ensure-newline)))
 
 (provide 'shr-tag-pre-highlight)
