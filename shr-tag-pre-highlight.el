@@ -6,7 +6,7 @@
 ;; URL: https://github.com/xuchunyang/shr-tag-pre-highlight.el
 ;; Package-Requires: ((emacs "24") (language-detection "0.1.0"))
 ;; Keywords: html
-;; Version: 1
+;; Version: 2
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -111,7 +111,9 @@ directly."
     ("calc" . fundamental) ("C" . c) ("cpp" . c++) ("C++" . c++)
     ("screen" . shell-script) ("shell" . sh) ("bash" . sh)
     ;; Used by language-detection.el
-    ("emacslisp" . emacs-lisp))
+    ("emacslisp" . emacs-lisp)
+    ;; Used by Google Code Prettify
+    ("el" . emacs-lisp))
   "Adapted from `org-src-lang-modes'."
   :group 'shr
   :type '(repeat
