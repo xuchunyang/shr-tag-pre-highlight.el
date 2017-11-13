@@ -4,7 +4,7 @@
 
 ;; Author: Chunyang Xu <mail@xuchunyang.me>
 ;; URL: https://github.com/xuchunyang/shr-tag-pre-highlight.el
-;; Package-Requires: ((emacs "24") (language-detection "0.1.0"))
+;; Package-Requires: ((emacs "25.1") (language-detection "0.1.0"))
 ;; Keywords: html
 ;; Version: 2
 
@@ -70,7 +70,7 @@
 ;;; Code:
 
 (require 'shr)
-(require 'dom)
+(require 'dom)                          ; 25.1+
 (require 'language-detection)
 (require 'cl-lib)
 
