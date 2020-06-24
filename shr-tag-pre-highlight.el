@@ -158,11 +158,12 @@ Adapted from `org-src--get-lang-mode'."
      ((and code
            (setq lang (dom-attr code 'data-language))))
      ;; <pre><code class="hljs clojure"> (https://highlightjs.org)
+     ;; <pre><code class="sourceCode haskell"> (https://pandoc.org/)
      ;; <pre><code class="lang-csharp">
      ;; <pre><code class="language-pascal">
      ((and code-class
            (setq lang (shr-tag-pre-highlight--match
-                       "\\(?:hljs \\|lang-\\|language-\\)\\([-+a-zA-Z0-9]+\\)" 1 code-class)))))
+                       "\\(?:hljs \\|sourceCode \\|lang-\\|language-\\)\\([-+a-zA-Z0-9]+\\)" 1 code-class)))))
     (setq lang (and lang (downcase lang)))
     (cond ((equal "auto" lang) nil)
           (lang lang)
