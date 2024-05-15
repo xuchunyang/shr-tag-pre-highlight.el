@@ -142,12 +142,16 @@ Adapted from `org-src--get-lang-mode'."
 (defun shr-tag-pre-highlight-guess-language-attr (pre)
   "Guess programming language base on the attributes of PRE."
   (let* ((pre-class (dom-attr pre 'class))
+         (pre-lang (dom-attr pre 'lang))
          (pre-attrs (dom-attributes pre))
          (code (car (dom-by-tag pre 'code)))
          (code-class (dom-attr code 'class))
          (code-attrs (dom-attributes code))
          lang)
     (cond
+     ;; <pre lang="nix"> (cmark-gfm and comrak)
+     ((and pre-lang
+           (setq lang pre-lang)))
      ;; <pre class="src src-C"> (Org mode)
      ;; <pre class="brush: js"> (http://alexgorbatchev.com/SyntaxHighlighter)
      ;; <pre class="sh_cpp"> (http://shjs.sourceforge.net/)
