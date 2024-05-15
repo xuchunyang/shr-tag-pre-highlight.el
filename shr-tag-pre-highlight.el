@@ -129,11 +129,12 @@ directly."
 LANG is a string, and the returned major mode is a symbol.
 
 Adapted from `org-src--get-lang-mode'."
-  (intern
-   (concat
-    (let ((l (or (cdr (assoc lang shr-tag-pre-highlight-lang-modes)) lang)))
-      (if (symbolp l) (symbol-name l) l))
-    "-mode")))
+  (let ((name (or (cdr (assoc lang shr-tag-pre-highlight-lang-modes)) lang)))
+    (cl-flet* ((ensure-mode (suffix)
+                 (let ((mode (intern (concat (if (symbolp name) (symbol-name name) name) suffix))))
+                   (and (fboundp mode) mode))))
+      (or (ensure-mode "-mode")
+          (ensure-mode "-ts-mode")))))
 
 (defun shr-tag-pre-highlight--match (regexp n-group string)
   (when (string-match regexp string)
@@ -207,7 +208,7 @@ Adapted from `org-src--get-lang-mode'."
                     (shr-tag-pre-highlight--get-lang-mode lang))))
     (shr-ensure-newline)
     (insert
-     (or (and (fboundp mode)
+     (or (and mode
               (with-demoted-errors "Error while fontifying: %S"
                 (shr-tag-pre-highlight-fontify code mode)))
          code))
