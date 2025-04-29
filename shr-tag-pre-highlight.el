@@ -153,6 +153,9 @@ Adapted from `org-src--get-lang-mode'."
      ;; <pre lang="nix"> (cmark-gfm and comrak)
      ((and pre-lang
            (setq lang pre-lang)))
+     ;; <pre data-language="python"> (DevDocs)
+     ((and (assq 'data-language pre-attrs)
+           (setq lang (cdr (assq 'data-language pre-attrs)))))
      ;; <pre class="src src-C"> (Org mode)
      ;; <pre class="brush: js"> (http://alexgorbatchev.com/SyntaxHighlighter)
      ;; <pre class="sh_cpp"> (http://shjs.sourceforge.net/)
