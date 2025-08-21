@@ -193,6 +193,8 @@ Adapted from `org-src--get-lang-mode'."
 (defun shr-tag-pre-highlight-fontify (code mode)
   "Fontify CODE with Major MODE."
   (with-temp-buffer
+    (when (boundp 'untrusted-content)
+      (set 'untrusted-content t))
     (insert code)
     (delay-mode-hooks (funcall mode))
     (if (fboundp 'font-lock-ensure)
