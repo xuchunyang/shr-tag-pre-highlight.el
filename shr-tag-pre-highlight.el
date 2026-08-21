@@ -103,6 +103,10 @@ directly."
       (apply orig-fun r))))
 
 
+;; `major-mode-remap-alist' is only available in Emacs 28.1+; declare it
+;; here so the byte-compiler doesn't warn on older versions.
+(defvar major-mode-remap-alist)
+
 ;;; Customization
 
 (defcustom shr-tag-pre-highlight-lang-modes
@@ -132,7 +136,11 @@ Adapted from `org-src--get-lang-mode'."
   (let ((name (or (cdr (assoc lang shr-tag-pre-highlight-lang-modes)) lang)))
     (cl-flet* ((ensure-mode (suffix)
                  (let ((mode (intern (concat (if (symbolp name) (symbol-name name) name) suffix))))
-                   (and (fboundp mode) mode))))
+                   (when (fboundp mode)
+                     (let ((remapped (when (boundp 'major-mode-remap-alist)
+                                       (alist-get mode major-mode-remap-alist))))
+                       (or (and remapped (fboundp remapped) remapped)
+                           mode))))))
       (or (ensure-mode "-mode")
           (ensure-mode "-ts-mode")))))
 
