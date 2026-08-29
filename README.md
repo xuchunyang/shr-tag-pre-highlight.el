@@ -1,5 +1,3 @@
-
-
 # shr-tag-pre-highlight - Syntax highlighting code block in HTML
 
 *Author:* Chunyang Xu <mail@xuchunyang.me><br>
